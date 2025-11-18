@@ -1,0 +1,142 @@
+---
+title: |
+  | Introduction to Data Science
+  | R Tutorial part 2
+  | Week 5  
+author: |
+  | Ilse Cuevas Andrade and Dr. Gah-Yi Ban
+  | Imperial College Business School
+  
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+\newpage
+\tableofcontents
+\listoffigures
+\listoftables
+\newpage
+
+
+Getting Started with R Notebook
+======================
+
+This is an *R Notebook*.
+
+**NOTE** The lines before line 23 are the settings of this R Notebook document.
+You can alter the text in blue colour. Please do not change anything else within
+the first 22 lines unless you are going to deal with some extra challenges.
+
+knit to PDF
+----------
+
+Use the button "Knit" and select the "Knit to PDF" option from the drop-down menu
+to knit this document to a PDF file. You can keep doing this step when you are
+updating your R Notebook to view the results in the output PDF file.
+
+An example code
+-----------
+
+Complete the follow task by adding a code chunk which contains the following elements:
+
+- code chunk name
+
+- variables
+
+- arithmetic calculation
+
+- comments
+
+Improve presentation of PDF
+-----------
+
+The following paragraphs summarize R Markdown key features.
+
+## R Markdown
+
+The special characters used to format this document come from a language called
+*Markdown*. Now that you've created a professional-looking copy of the handout,
+let's learn about the different characters we used for formatting it.
+
+### Headings
+
+Up until now, we created headings by using a dashed line like so `----------`.
+A more common way to specify headings in Markdown is with the hash # symbol. Do
+not confuse this with comments in R - these only occur when inside a code chunk!
+
+##### Heading Levels
+
+There are six levels of headings specified by the hash symbol. Top-level
+headings are specified by # (one hash symbol) , where the lowest level headings
+are specified by ###### (six hash symbols).
+
+### Emphasis
+
+You can make text *italic* by enclosing words or phrases in *single asterisks* *
+
+Use **double asterisks** to make text **bold** **
+
+Code is often represented in `monospace text`, enclosed in `single backticks` `
+
+You can also ~~strike text out~~ with double tildes ~~
+
+### Lists
+
+Dashes are used to create lists. For nesting items within a list, indent the
+nested items by a consistent amount (2-spaces are recommended). Ensure there is
+a blank line between paragraphs and lists in the document.
+
+- first item
+  - nested item
+    - further nesting
+- second item
+
+### Code
+
+You have seen how we represent larger blocks of code in code chunks, starting
+and ending with three single backticks.
+
+```
+Generic code chunks can contain code in any language, but will not be evaluated.
+```
+
+If we want code blocks to be evaluated with R, we use the {r} directive,
+optionally giving the code chunk a name.
+```{r Code chunk example}
+print("This code will appear in the rendering and it will be evaluated")
+```
+
+We can specify several options inside the {r} directive, separated by commas. To
+force the code chunk to not evaluate and not show a result, use `eval=FALSE`
+```{r Non-evaluated code chunk, eval=FALSE}
+print("This code will appear in the rendering but will NOT be evaluated")
+```
+
+Other times, we want to see the result, but not the code that produced it. For
+this, use `echo=FALSE`
+```{r Hidden code chunk, echo=FALSE}
+print("Only the result of this code chunk will appear in the rendered document")
+```
+
+
+[Markdown](https://rmarkdown.rstudio.com/lesson-1.html) allows you to compose
+and improve the presentation of final output in RStudio. Click on the link 
+https://rmarkdown.rstudio.com/lesson-1.html
+for 
+further information and try to improve the presentation of this document in PDF
+format. For example,
+
+- Add more chapters/sections.
+
+- Add bullet points.
+
+- Add highlights, such as, bold, italic fonts etc.
+
+- Remove unnecessary list from the table of contents.
+
+**Hint**: edit the lines within the first 20 lines as needed, then knit again.
+
+## The End
+

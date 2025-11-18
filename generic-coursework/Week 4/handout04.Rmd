@@ -1,0 +1,299 @@
+---
+title: |
+  | Introduction to Data Science
+  | R exercises in-class
+  | Week 4  
+author: |
+  | Dr. Gah-Yi Ban
+  | Imperial College Business School
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# Data Visualization
+
+This tutorial covers data visualization skills and pipe operators.
+
+Let's use `tidyverse` package to support `%>%` operators and `ggplot2`
+to support data visualization.
+
+**NOTE:** If you don't have `tidyverse` and `ggplot2` packages on your
+RStudio, please install it first by running `install.packages("tidyverse")`
+then `install.packages("ggplot2")` in the R Console.
+
+```{r load lib, warning=F, message=F}
+library(tidyverse)
+library(ggplot2)
+```
+
+Before starting any practice and exercises, load the dataset
+"uk_gdp_and_weeklyWage.csv".
+
+```{r load data}
+uk_gdp_and_weeklyWage <- read.csv("uk_gdp_and_weeklyWage2.csv", 
+                                  stringsAsFactors = F)
+
+```
+
+Next, we add GDP growth rates and categorize the growth rate into
+quartiles. 
+
+*Note:* there will be NA(s) in the GDP growth rates data, so we use `filter` to remove any rows with NA data.
+
+```{r quartiles}
+
+
+uk_gdp_and_weeklyWage <- uk_gdp_and_weeklyWage %>% 
+  mutate(GDP_growth_rate = (GDP_m - lag(GDP_m)) / lag(GDP_m) * 100, 
+         weeklyWageQuantile = cut(Weekly_pay, 
+                                  quantile(Weekly_pay, 
+                                           probs = seq(0, 1, 0.25), type = 7), 
+                                  include.lowest = T, labels = F)
+         )
+
+uk_gdp_and_weeklyWage <- uk_gdp_and_weeklyWage %>% 
+  mutate (GDP_growth_rate_Quantile = cut(GDP_growth_rate, 
+                                  quantile(GDP_growth_rate, 
+                                           probs = seq(0, 1, 0.25), type = 7, na.rm = T), 
+                                  include.lowest = T, labels = F)
+  )
+
+uk_gdp_and_weeklyWage <- uk_gdp_and_weeklyWage %>% filter(!is.na(GDP_growth_rate))
+
+```
+
+## Plot weekly wage
+
+To plot some data, we need to allocate the data for x-axis and y-axis
+and set them as the arguments for `aes` in the `ggplot` function,
+followed by the verbs provided by the `ggplot2` package. For example,
+`geom_point` is used to create a scatterplot. After the use of each verb,
+`+` is required. An application of `ggplot` is shown in the following code
+chunk.
+
+```{r plot weekly wage, fig.cap="UK Weekly Wage Plot"}
+uk_gdp_and_weeklyWage %>% ggplot(aes(x=Year, y=Weekly_pay)) + 
+   geom_point( )
+```
+
+Running the above code chunck, a scatterplot will appear because of the
+use of `geom_point`.
+
+Change `geom_point` to `geom_line`, and a line plot will be plotted.
+Try the following code chunk.
+
+```{r plot weekly wage line}
+uk_gdp_and_weeklyWage %>% ggplot(aes(x=Year, y=Weekly_pay)) + 
+   geom_line( )
+```
+
+To obtain scatter points and a line together for a dataset, `geom_point`
+and `geom_line` can be used together. Try the following code chunk.
+
+```{r plot weekly wage line and dot}
+uk_gdp_and_weeklyWage %>% ggplot(aes(x=Year, y=Weekly_pay)) + 
+   geom_point() + 
+  geom_line()
+```
+
+In the above code chunks, `aes` is set as an argument of `ggplot`.
+Alternatively, `ggplot()` can be used alone and then `aes` can be set as
+an argument later in the verbs of `ggplot`. For example, the previous
+code chunk can be rewritten as the following chunk to generate the same plot.
+
+```{r plot weekly wage line and dot1}
+p <- uk_gdp_and_weeklyWage %>% ggplot() 
+p + geom_point(aes(x=Year, y=Weekly_pay)) + 
+  geom_line(aes(x=Year, y=Weekly_pay)) 
+```
+
+In the previous plots, the label for the y-axis was set using the data
+column name by default. To change the label of y-axis appropriately, `y`
+can be added in the `labs` verb. A title of the plot can be added as well,
+as shown in the following code chunk.
+
+```{r plot weekly wage line and dot2}
+p <- uk_gdp_and_weeklyWage %>% ggplot(aes(x=Year, y=Weekly_pay)) 
+p + geom_point( ) + 
+  geom_line()  +
+  labs(
+    title ="Weekly Wage between 2001 and 2022 (UK)",
+    y = "Weekly Wage (£)"
+       )
+```
+
+To improve the presentation, more settings and verbs can be added, for
+example, `size`, `theme()`, as demonstrated in the next code chunk.
+
+```{r plot weekly wage line and dot3}
+p <- uk_gdp_and_weeklyWage %>% ggplot(aes(x=Year, y=Weekly_pay)) 
+p + geom_point(size=2) + # size = 2 for changing scatter points size
+  geom_line()  +
+  labs(
+    title ="Weekly Wage between 2001 and 2022 (UK)",
+    y = "Weekly Wage (£)"
+       ) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 12, face = "bold")
+  ) 
+```
+
+## Multiple lines in one plot
+
+To add additional lines and scatter points to a plot, you just need to add
+more verbs such as `geom_point` and `geom_line`. Don't forget the `+`
+for connecting the verbs.
+
+In the following exercise, add multiple lines in a plot by adding
+scatter points and a line for "GDP_growth_rate". You would need to first
+create the new column "GDP_growth_rate" (you can get the code from Week
+3 in-class R exercises or try to code it from scratch). Try making the
+"GDP_growth_rate" plot red by adding `colour='red'` as options in
+`geom_point` and `geom_line`.
+
+*Exercise 1*
+
+```{r Exercise 1}
+# Create a new column "GDP_growth_rate"
+uk_gdp_and_weeklyWage <- ???
+
+# Define a ggplot object
+p <- uk_gdp_and_weeklyWage %>% ggplot(aes(x=???, y=???)) 
+
+# Add layers to create the desired plot
+p + ???
+  
+  
+  
+```
+
+After running the code above, have you noticed any issue(s)?
+
+The problem of plotting the weekly wage and the GDP growth rate on the same plot is that the two datasets are very different in their numeric values. This leads to the GDP growth rate being difficult to read on the plot. To address the issue(s), one of the methods is to provide a secondary y-axis, which has a different range from the primary y-axis.
+
+One limitation with `ggplot` however is that a new range of the secondary y-axis cannot be set with arbitrary numeric range. Instead, a **scale factor** needs to be estimated for the new range. The scale factor can be calculated or estimated using the numeric ranges of the two datasets as below. (Note that further adjustments on the scale factor may need to be made by trial-and-error).
+
+$$
+scale\_factor = (max_{2nd\ dataset} - min_{2nd\ dataset}) / (max_{1st\ dataset} -  min_{1st\ dataset}) 
+$$
+
+Try running the following code chunk.
+
+```{r dual y-axes}
+scale_factor <- (max(uk_gdp_and_weeklyWage$GDP_growth_rate)-
+                min(uk_gdp_and_weeklyWage$GDP_growth_rate))/
+  (max(uk_gdp_and_weeklyWage$Weekly_pay)-
+     min(uk_gdp_and_weeklyWage$Weekly_pay))
+
+scale_factor <- scale_factor/2 # further adjustments to the scale factor by trial and error
+
+p <- uk_gdp_and_weeklyWage %>% ggplot(aes(x=Year, y=Weekly_pay)) 
+p + geom_point( size=2) + 
+  geom_line()  +
+  geom_point(aes(y = GDP_growth_rate/scale_factor),size=2, colour = 'red') +
+  geom_line(aes(y = GDP_growth_rate/scale_factor),colour = 'red') +
+  labs(
+    title ="Weekly Wage between 2001 and 2022 (UK)",
+    y = "Weekly Wage (£)"
+       ) +
+  scale_y_continuous(sec.axis = sec_axis(~. *scale_factor, name= "GDP Growth Rate (%)")) +
+  theme(axis.line.y.right = element_line(color = "red"),
+        axis.ticks.y.right = element_line(color = "red"), 
+        axis.title.y.right = element_text(colour = "red"), 
+        axis.text.y.right = element_text(color = "red")) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 12, face = "bold")
+  )
+```
+
+In the following, first calculate GDP per capita as a new variable,
+"GDP_per_cap", and plot "Weekly_Wage_pay" and "GDP_per_cap" in one
+plot using methods similar to the above. Note that the column "GDP_m" is
+the GDP in millions of pounds.
+
+*Exercise 2*
+
+```{r Exercise 2}
+
+# Create a new column for GDP per capita "GDP_per_cap"
+uk_gdp_and_weeklyWage <- ???
+
+# Define a new scale factor for plotting "GDP_per_cap" and 
+# "Weekly_Wage_pay" on the same plot
+  
+scale_factor <- ???
+
+scale_factor = scale_factor*2 # further adjustments to the scale factor by trial and error
+
+# Make the desired plot using ggplot()
+
+p <- ??? 
+p + ???
+
+```
+
+The plots can be further customised as follows. `ggplot` has different features and also pre-determined themes. Run the code chunk below and study it, then try your own variations.
+
+```{r further customisation}
+# Load required libraries
+
+# Assuming you've already created 'uk_gdp_and_weeklyWage' data frame 
+# and calculated 'scale_factor'
+
+# Create the initial ggplot object
+p <- ggplot(uk_gdp_and_weeklyWage, aes(x = Year)) +
+  geom_line(aes(y = Weekly_pay), color = "blue", linetype = "solid") +
+  geom_point(aes(y = Weekly_pay), size = 3, shape = 19, 
+             color = "blue", fill = "blue", alpha = 0.7) +
+  geom_line(aes(y = GDP_per_cap / scale_factor), 
+            color = "red", linetype = "dashed") +
+  geom_point(aes(y = GDP_per_cap / scale_factor), size = 3, shape = 17, 
+             color = "red", fill = "red", alpha = 0.7) +
+  
+  # Customize the axis labels and titles
+  labs(title = "Weekly Wage and Scaled GDP per Capita (UK, 2001-2022)",
+       x = "Year",
+       y = "Weekly Wage (£)",
+       color = "Legend") +
+  
+# Scale the secondary y-axis
+# This part of the code defines how the values on the secondary y-axis 
+# should be calculated from the primary y-axis values. It multiplies the 
+# primary y-axis values by the scale_factor you've defined earlier in your
+# code. This multiplication scales the GDP per capita values to align with
+# the weekly wage values.
+  
+  scale_y_continuous(
+    sec.axis = sec_axis(~ . * scale_factor, 
+                        name = "GDP per Capita (£/pp)", 
+                        breaks = seq(0, 80000, by = 10000)
+                        )
+    ) + 
+  
+  # Customize colors and legends
+  scale_color_manual(values = c("blue" = "Weekly Wage", 
+                                "red" = "Scaled GDP per Capita")) +
+  
+  # Add a legend
+  guides(color = guide_legend(title = "Legend")) +
+  
+  # Customize the appearance
+  theme_minimal() +
+  theme(
+    axis.title.y.left = element_text(color = "blue"),
+    axis.title.y.right = element_text(color = "red"),
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+    legend.position = c(0.85, 0.15)
+  )
+
+# Display the plot
+print(p)
+
+```
+
+## The End

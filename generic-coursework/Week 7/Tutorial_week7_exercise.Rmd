@@ -1,0 +1,97 @@
+---
+title: |
+  | Introduction to Data Science
+  | R Tutorial
+  | Week 7 
+author: |
+  | Ilse Cuevas Andrade and Dr. Gah-Yi Ban
+  | Imperial College Business School
+
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+
+
+## **Exercise: Detecting Outliers in `airquality` Dataset**
+
+This exercise guides you through detecting outliers in the `Ozone` column of the `airquality` dataset using a boxplot, IQR method, and a scatterplot for visualisation.
+
+---
+
+### **Step 1: Load and Explore the Dataset**
+
+We will use the `airquality` dataset, which contains air quality measurements. Start by loading and inspecting the data.
+
+```{r}
+# Load tidyverse
+library(tidyverse)
+```
+
+
+```{r}
+# Load the airquality dataset and inspect it
+data("airquality")
+
+
+head(airquality)
+
+
+airquality<-airquality %>%
+  rowid_to_column("Index") %>%  # Add an index column for plotting
+  drop_na(Ozone)               # Remove rows with missing Ozone values
+
+
+```
+
+
+
+*Exercise 1*
+Create a boxplot of the Ozone column to visually inspect for outliers.
+
+```{r}
+# Boxplot of Ozone levels
+
+```
+
+
+*Exercise 2*
+Follow these steps to calculate and use the IQR to detect outliers:
+
+Compute the quartiles (Q1, Q3) and the IQR.
+Calculate the lower and upper bounds for detecting outliers.
+Identify which data points fall outside these bounds.
+
+```{r}
+# Calculate IQR and classify points as outliers
+ozone_with_outliers <- ???
+
+# Display the bounds and outliers
+ozone_bounds <- ???
+
+cat("Lower and Upper Bounds for Ozone Levels:\n")
+print(ozone_bounds)
+
+cat("\nOutliers in Ozone Levels:\n")
+print(ozone_with_outliers %>% filter(Is_Outlier == "Outlier") %>% select(Index, Ozone))
+
+
+```
+
+
+
+*Exercise 3*
+Create a scatterplot where outliers are highlighted in red.
+```{r}
+# Scatterplot of Ozone levels with outliers highlighted
+
+
+```
+
+
+
+
+
+## The end
